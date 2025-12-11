@@ -5,7 +5,7 @@ import { authMiddleware } from "./auth";
 import z from "zod";
 import { Message, realtime } from "@/lib/realtime";
 
-const ROOM_TTL_SECONDS = 60 * 10;
+const ROOM_TTL_SECONDS = 60*10;
 
 const rooms = new Elysia({ prefix: "/room" })
   .post("/create", async () => {
@@ -16,7 +16,7 @@ const rooms = new Elysia({ prefix: "/room" })
       createdAt: Date.now(),
     });
 
-    await redis.expire(`mets:${roomId}`, ROOM_TTL_SECONDS);
+    await redis.expire(`meta:${roomId}`, ROOM_TTL_SECONDS);
 
     return { roomId };
   })
@@ -30,13 +30,13 @@ const rooms = new Elysia({ prefix: "/room" })
     query: z.object({
       roomId: z.string(),
     }),
-  })
+  }) 
   .delete("/", async({auth}) => {
     await realtime.channel(auth.roomId).emit("chat.destroy", { isDestroyed: true})
 
     await Promise.all([
       redis.del(auth.roomId),
-      redis.decr(`meta:${auth.roomId}`),
+      redis.del(`meta:${auth.roomId}`),
       redis.del(`messages:${auth.roomId}`),
     ])
   }, {
@@ -82,28 +82,28 @@ const messages = new Elysia({ prefix: "/messages" }).use(
         }),
       }
     )
-    .get(
-      "/",
-      async ({ auth }) => {
-        const messages = await redis.lrange<Message>(
-          `messages:${auth.roomId}`,
-          0,
-          -1
-        );
+      .get(
+        "/",
+        async ({ auth }) => {
+          const messages = await redis.lrange<Message>(
+            `messages:${auth.roomId}`,
+            0,
+            -1
+          );
 
-        return {
-          messages: messages.map((m) => ({
-            ...m,
-            token: m.token === auth.token ? auth.token : undefined,
-          })),
-        };
-      },
-      {
-        query: z.object({
-          roomId: z.string(),
-        }),
-      }
-    )
+          return {
+            messages: messages.map((m) => ({
+              ...m,
+              token: m.token === auth.token ? auth.token : undefined,
+            })),
+          };
+        },
+        {
+          query: z.object({
+            roomId: z.string(),
+          }),
+        }
+      ) 
 );
 
 const app = new Elysia({ prefix: "/api" }).use(rooms).use(messages);
