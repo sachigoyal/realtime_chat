@@ -4,8 +4,17 @@ import { useUsername } from "@/hooks/useUsername";
 import { client } from "@/lib/client";
 import { useMutation } from "@tanstack/react-query";
 import { useSearchParams, useRouter } from "next/navigation";
+import { Suspense } from "react";
 
-export default function Home() {
+export default function Page() {
+  return (
+    <Suspense>
+      <Lobby />
+    </Suspense>
+  )
+}
+
+function Lobby() {
   const { username } = useUsername();
   const searchParams = useSearchParams();
   const wasDestroyed = searchParams.get("destroyed") === "true";
