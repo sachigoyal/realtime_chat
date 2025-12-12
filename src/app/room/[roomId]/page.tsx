@@ -103,33 +103,33 @@ export default function Room() {
   };
   return (
     <main className="flex flex-col h-screen max-h-screen overflow-hidden">
-      <header className="border-b border-zinc-800 p-4 flex items-center justify-between bg-zinc-900/30">
+      <header className="border-b border-zinc-200 dark:border-zinc-800 p-4 flex items-center justify-between bg-zinc-100/50 dark:bg-zinc-900/30">
         <div className="flex items-center gap-4">
           <div className="flex flex-col">
-            <span className="text-xs text-zinc-500 uppercase">Room ID</span>
+            <span className="text-xs text-zinc-500 dark:text-zinc-500 uppercase">Room ID</span>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-green-500 truncate">
+              <span className="font-bold text-green-600 dark:text-green-500 truncate">
                 {roomId}
               </span>
               <button
                 onClick={copyLink}
-                className="text-[10px] bg-zinc-800 cursor-pointer hover:bg-zinc-700 px-2 py-0.5 rounded text-zinc-400 hover:text-zinc-200 transition-colors"
+                className="text-[10px] bg-zinc-200 dark:bg-zinc-800 cursor-pointer hover:bg-zinc-300 dark:hover:bg-zinc-700 px-2 py-0.5 rounded text-zinc-600 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors"
               >
                 {copyStatus}
               </button>
             </div>
           </div>
-          <div className="h-8 w-px bg-zinc-700" />
+          <div className="h-8 w-px bg-zinc-300 dark:bg-zinc-700" />
 
           <div className="flex flex-col">
-            <span className="text-xs text-zinc-500 uppercase">
+            <span className="text-xs text-zinc-500 dark:text-zinc-500 uppercase">
               Self-Destruct
             </span>
             <span
               className={`text-sm font-bold flex items-center gap-2 ${
                 timeRemaining !== null && timeRemaining < 60
-                  ? "text-red-500"
-                  : "text-amber-500"
+                  ? "text-red-600 dark:text-red-500"
+                  : "text-amber-600 dark:text-amber-500"
               }`}
             >
               {timeRemaining !== null
@@ -140,7 +140,7 @@ export default function Room() {
         </div>
         <button
           onClick={() => destroyRoom()}
-          className="text-xs bg-zinc-800 hover:bg-red-600 px-3 py-1.5 rounded text-zinc-400 hover:text-white font-bold transition-all group flex items-center gap-2 disabled:opacity-50"
+          className="text-xs bg-zinc-200 dark:bg-zinc-800 hover:bg-red-600 px-3 py-1.5 rounded text-zinc-600 dark:text-zinc-400 hover:text-white font-bold transition-all group flex items-center gap-2 disabled:opacity-50"
         >
           <span className="group-hover:animate-pulse">💣</span>
           DESTROY NOW
@@ -152,7 +152,7 @@ export default function Room() {
           "messages" in messages &&
           messages.messages.length === 0 && (
             <div className="flex items-center justify-center h-full">
-              <p className="text-zinc-600 text-sm font-mono">
+              <p className="text-zinc-500 dark:text-zinc-600 text-sm font-mono">
                 No messages yet, start the conversation.
               </p>
             </div>
@@ -168,19 +168,19 @@ export default function Room() {
                   <span
                     className={`text-xs font-bold ${
                       msg.sender === username
-                        ? "text-green-500"
-                        : "text-blue-500"
+                        ? "text-green-600 dark:text-green-500"
+                        : "text-blue-600 dark:text-blue-500"
                     }`}
                   >
                     {msg.sender === username ? "YOU" : msg.sender}
                   </span>
 
-                  <span className="text-[10px] text-zinc-600">
+                  <span className="text-[10px] text-zinc-500 dark:text-zinc-600">
                     {format(msg.timeStamp, "HH:mm")}
                   </span>
                 </div>
 
-                <p className="text-sm text-zinc-300 leading-relaxed break-all">
+                <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed break-all">
                   {msg.text}
                 </p>
               </div>
@@ -188,10 +188,10 @@ export default function Room() {
           ))}
       </div>
 
-      <div className="p-4 border-t border-zinc-800 bg-zinc-900/30">
+      <div className="p-4 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-zinc-900/30">
         <div className="flex gap-4">
           <div className="flex-1 relative group">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-green-500 animate-pulse">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-green-600 dark:text-green-500 animate-pulse">
               {">"}
             </span>
             <input
@@ -206,7 +206,7 @@ export default function Room() {
               }}
               placeholder="Type message..."
               onChange={(e) => setInput(e.target.value)}
-              className="w-full bg-black border border-zinc-800 focus:border-zinc-700 focus:outline-none transition-colors text-zinc-100 placeholder:text-zinc-700 py-3 pl-8 pr-4 text-sm"
+              className="w-full bg-white dark:bg-black border border-zinc-300 dark:border-zinc-800 focus:border-zinc-400 dark:focus:border-zinc-700 focus:outline-none transition-colors text-zinc-800 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-700 py-3 pl-8 pr-4 text-sm"
             />
           </div>
           <button
@@ -215,7 +215,7 @@ export default function Room() {
               inputRef.current?.focus();
             }}
             disabled={!input.trim() || isPending}
-            className="bg-zinc-800 text-zinc-400 px-6 text-sm font-bold hover:text-zinc-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            className="bg-zinc-900 dark:bg-zinc-800 text-zinc-100 dark:text-zinc-400 px-6 text-sm font-bold hover:bg-zinc-700 hover:text-white dark:hover:text-zinc-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             SEND
           </button>
