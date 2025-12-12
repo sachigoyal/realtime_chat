@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { redis } from "@/lib/redis"
 import { nanoid } from "nanoid"
-
+import { isbot } from "isbot"
 
 export const proxy = async (req: NextRequest) => {
     const pathname = req.nextUrl.pathname
@@ -17,6 +17,11 @@ export const proxy = async (req: NextRequest) => {
     }>(`meta:${roomId}`)
 
     if(!meta) return NextResponse.redirect(new URL("/?error=room-not-found", req.url))
+
+    const userAgent = req.headers.get("user-agent")
+    if (isbot(userAgent)) {
+        return NextResponse.next()
+    }
 
     const existingToken = req.cookies.get("x-auth-token")?.value
 
