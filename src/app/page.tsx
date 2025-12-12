@@ -6,13 +6,14 @@ import { useMutation } from "@tanstack/react-query";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
 import ModeToggle from "@/components/mode-toggle";
+import { Github } from "@/lib/github";
 
 export default function Page() {
   return (
     <Suspense>
       <Lobby />
     </Suspense>
-  )
+  );
 }
 
 function Lobby() {
@@ -33,11 +34,23 @@ function Lobby() {
   });
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center p-4">
-      <ModeToggle className="absolute top-4 right-4" />
+      <div className="absolute top-4 right-4 flex items-center gap-1">
+        <a
+          href="https://github.com/sachigoyal/realtime_chat"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="p-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors [&_svg]:size-5"
+        >
+          <Github />
+        </a>
+        <ModeToggle />
+      </div>
       <div className="w-full max-w-md space-y-8">
         {wasDestroyed && (
           <div className="bg-red-100 dark:bg-red-950/50 border border-red-300 dark:border-red-900 p-4 text-center">
-            <p className="text-red-700 dark:text-red-500 text-sm font-bold">ROOM DESTROYED</p>
+            <p className="text-red-700 dark:text-red-500 text-sm font-bold">
+              ROOM DESTROYED
+            </p>
             <p className="text-red-600/70 dark:text-zinc-500 text-xs mt-1">
               All messages were permanently deleted.
             </p>
@@ -45,7 +58,9 @@ function Lobby() {
         )}
         {error === "room-not-found" && (
           <div className="bg-red-100 dark:bg-red-950/50 border border-red-300 dark:border-red-900 p-4 text-center">
-            <p className="text-red-700 dark:text-red-500 text-sm font-bold">ROOM NOT FOUND</p>
+            <p className="text-red-700 dark:text-red-500 text-sm font-bold">
+              ROOM NOT FOUND
+            </p>
             <p className="text-red-600/70 dark:text-zinc-500 text-xs mt-1">
               This room may have expired or never existed.
             </p>
@@ -53,7 +68,9 @@ function Lobby() {
         )}
         {error === "room-full" && (
           <div className="bg-red-100 dark:bg-red-950/50 border border-red-300 dark:border-red-900 p-4 text-center">
-            <p className="text-red-700 dark:text-red-500 text-sm font-bold">ROOM FULL</p>
+            <p className="text-red-700 dark:text-red-500 text-sm font-bold">
+              ROOM FULL
+            </p>
             <p className="text-red-600/70 dark:text-zinc-500 text-xs mt-1">
               This room is at maximum capacity.
             </p>
